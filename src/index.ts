@@ -1,5 +1,5 @@
 export { useCytoscape } from './useCytoscape'
-export type { UseCytoscapeOptions, EdgeTooltipContext } from './useCytoscape'
+export type { UseCytoscapeOptions, EdgeTooltipContext, DepthEffectOptions } from './useCytoscape'
 export type {
   RelationTypeConfig,
   GraphNodeData,

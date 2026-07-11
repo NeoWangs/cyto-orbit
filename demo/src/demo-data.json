@@ -1,0 +1,554 @@
+{
+  "words": [
+    {
+      "id": "dog",
+      "label": "dog",
+      "phonetic": "/dɒg/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "驯养的食肉哺乳动物"
+        }
+      ],
+      "examples": [
+        "The dog barked loudly.",
+        "She walked her dog in the park."
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "canine",
+      "label": "canine",
+      "phonetic": "/ˈkeɪnaɪn/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "犬科动物"
+        }
+      ],
+      "examples": [
+        "Wolves are canines."
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "pooch",
+      "label": "pooch",
+      "phonetic": "/puːtʃ/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "狗（非正式用法）"
+        }
+      ],
+      "examples": [
+        "What a cute pooch!"
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "animal",
+      "label": "animal",
+      "phonetic": "/ˈænɪməl/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "动物"
+        }
+      ],
+      "examples": [
+        "All dogs are animals."
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "mammal",
+      "label": "mammal",
+      "phonetic": "/ˈmæməl/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "哺乳动物"
+        }
+      ],
+      "examples": [
+        "Mammals nurse their young."
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "puppy",
+      "label": "puppy",
+      "phonetic": "/ˈpʌpi/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "幼犬"
+        }
+      ],
+      "examples": [
+        "The puppy is so cute!"
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "hound",
+      "label": "hound",
+      "phonetic": "/haʊnd/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "猎犬"
+        }
+      ],
+      "examples": [
+        "The hound tracked the scent."
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "bulldog",
+      "label": "bulldog",
+      "phonetic": "/ˈbʊldɒg/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "斗牛犬"
+        }
+      ],
+      "examples": [
+        "Bulldogs have a distinctive appearance."
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "watchdog",
+      "label": "watchdog",
+      "phonetic": "/ˈwɒtʃdɒg/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "看门狗；监督者"
+        }
+      ],
+      "examples": [
+        "The watchdog barked at strangers."
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "tail",
+      "label": "tail",
+      "phonetic": "/teɪl/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "尾巴"
+        }
+      ],
+      "examples": [
+        "The dog wagged its tail."
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "paw",
+      "label": "paw",
+      "phonetic": "/pɔː/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "爪子"
+        }
+      ],
+      "examples": [
+        "The dog hurt its paw."
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "cat",
+      "label": "cat",
+      "phonetic": "/kæt/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "猫"
+        }
+      ],
+      "examples": [
+        "The cat meowed."
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "feline",
+      "label": "feline",
+      "phonetic": "/ˈfiːlaɪn/",
+      "posDefinitions": [
+        {
+          "pos": "noun",
+          "definition": "猫科动物"
+        }
+      ],
+      "examples": [
+        "Lions are felines."
+      ],
+      "createdAt": "2025-10-23T05:53:38.826Z",
+      "updatedAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "id": "word_1761200511406",
+      "label": "poppy",
+      "posDefinitions": [
+        {}
+      ],
+      "examples": [],
+      "createdAt": "2025-10-23T06:21:51.406Z",
+      "updatedAt": "2025-10-23T06:21:51.406Z"
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn_init_14_1761198818827",
+      "source": "watchdog",
+      "target": "dog",
+      "relation": "compound",
+      "createdAt": "2025-10-23T05:53:38.826Z"
+    },
+    {
+      "source": "dog",
+      "target": "canine",
+      "relation": "hypernym",
+      "id": "conn_1761200402256_xm49yt5pp",
+      "createdAt": "2025-10-23T06:20:02.256Z"
+    },
+    {
+      "source": "canine",
+      "target": "dog",
+      "relation": "hyponym",
+      "id": "conn_1761200402257_r2y0wop22",
+      "createdAt": "2025-10-23T06:20:02.257Z"
+    },
+    {
+      "source": "dog",
+      "target": "puppy",
+      "relation": "hyponym",
+      "id": "conn_1761200402257_pstqlzqy2",
+      "createdAt": "2025-10-23T06:20:02.257Z"
+    },
+    {
+      "source": "puppy",
+      "target": "dog",
+      "relation": "hypernym",
+      "id": "conn_1761200402257_nzzqp1n1s",
+      "createdAt": "2025-10-23T06:20:02.257Z"
+    },
+    {
+      "source": "dog",
+      "target": "hound",
+      "relation": "hyponym",
+      "id": "conn_1761200402257_q9bciw91y",
+      "createdAt": "2025-10-23T06:20:02.257Z"
+    },
+    {
+      "source": "hound",
+      "target": "dog",
+      "relation": "hypernym",
+      "id": "conn_1761200402257_poq5fg4fb",
+      "createdAt": "2025-10-23T06:20:02.257Z"
+    },
+    {
+      "source": "dog",
+      "target": "bulldog",
+      "relation": "hyponym",
+      "id": "conn_1761200402257_7yhgsypu8",
+      "createdAt": "2025-10-23T06:20:02.257Z"
+    },
+    {
+      "source": "bulldog",
+      "target": "dog",
+      "relation": "hypernym",
+      "id": "conn_1761200402257_jxpmi3of6",
+      "createdAt": "2025-10-23T06:20:02.257Z"
+    },
+    {
+      "source": "dog",
+      "target": "pooch",
+      "relation": "synonym",
+      "id": "conn_1761200402257_kbtwyu63p",
+      "createdAt": "2025-10-23T06:20:02.257Z"
+    },
+    {
+      "source": "pooch",
+      "target": "dog",
+      "relation": "synonym",
+      "id": "conn_1761200402257_42srkxva4",
+      "createdAt": "2025-10-23T06:20:02.257Z"
+    },
+    {
+      "source": "dog",
+      "target": "tail",
+      "relation": "meronym",
+      "id": "conn_1761200402257_jbu00gf4o",
+      "createdAt": "2025-10-23T06:20:02.257Z"
+    },
+    {
+      "source": "tail",
+      "target": "dog",
+      "relation": "holonym",
+      "id": "conn_1761200402258_ju2u47l44",
+      "createdAt": "2025-10-23T06:20:02.258Z"
+    },
+    {
+      "source": "dog",
+      "target": "paw",
+      "relation": "meronym",
+      "id": "conn_1761200402258_btgudq854",
+      "createdAt": "2025-10-23T06:20:02.258Z"
+    },
+    {
+      "source": "paw",
+      "target": "dog",
+      "relation": "holonym",
+      "id": "conn_1761200402258_3jnfqopqa",
+      "createdAt": "2025-10-23T06:20:02.258Z"
+    },
+    {
+      "source": "puppy",
+      "target": "word_1761200511406",
+      "relation": "graphonyms",
+      "id": "conn_1761200517750_wr416pdn2",
+      "createdAt": "2025-10-23T06:21:57.750Z"
+    },
+    {
+      "source": "word_1761200511406",
+      "target": "puppy",
+      "relation": "graphonyms",
+      "id": "conn_1761200517751_hra83r5fd",
+      "createdAt": "2025-10-23T06:21:57.751Z"
+    },
+    {
+      "source": "mammal",
+      "target": "animal",
+      "relation": "hypernym",
+      "id": "conn_1761200558377_kplzambxx",
+      "createdAt": "2025-10-23T06:22:38.377Z"
+    },
+    {
+      "source": "animal",
+      "target": "mammal",
+      "relation": "hyponym",
+      "id": "conn_1761200558377_f57d1abbl",
+      "createdAt": "2025-10-23T06:22:38.377Z"
+    },
+    {
+      "source": "mammal",
+      "target": "canine",
+      "relation": "hyponym",
+      "id": "conn_1761200558377_2of7bsl1o",
+      "createdAt": "2025-10-23T06:22:38.377Z"
+    },
+    {
+      "source": "canine",
+      "target": "mammal",
+      "relation": "hypernym",
+      "id": "conn_1761200558377_r7mowc168",
+      "createdAt": "2025-10-23T06:22:38.377Z"
+    },
+    {
+      "source": "feline",
+      "target": "mammal",
+      "relation": "hypernym",
+      "id": "conn_1761200577008_og5ek10tj",
+      "createdAt": "2025-10-23T06:22:57.008Z"
+    },
+    {
+      "source": "mammal",
+      "target": "feline",
+      "relation": "hyponym",
+      "id": "conn_1761200577008_2vd7y8qrl",
+      "createdAt": "2025-10-23T06:22:57.008Z"
+    },
+    {
+      "source": "feline",
+      "target": "cat",
+      "relation": "hyponym",
+      "id": "conn_1761200577008_twogwcihi",
+      "createdAt": "2025-10-23T06:22:57.008Z"
+    },
+    {
+      "source": "cat",
+      "target": "feline",
+      "relation": "hypernym",
+      "id": "conn_1761200577008_0mxr2y13k",
+      "createdAt": "2025-10-23T06:22:57.008Z"
+    }
+  ],
+  "relationTypes": [
+    {
+      "key": "hypernym",
+      "label": "上位词",
+      "color": "#e74c3c",
+      "lineStyle": "solid",
+      "arrowStyle": "filled",
+      "edgeLength": 100,
+      "pairWith": "hyponym",
+      "defaultActive": true
+    },
+    {
+      "key": "hyponym",
+      "label": "下位词",
+      "color": "#3498db",
+      "lineStyle": "solid",
+      "arrowStyle": "filled",
+      "edgeLength": 100,
+      "pairWith": "hypernym",
+      "defaultActive": false
+    },
+    {
+      "key": "synonym",
+      "label": "同义词",
+      "color": "#2ecc71",
+      "lineStyle": "dashed",
+      "arrowStyle": "none",
+      "edgeLength": 100,
+      "pairWith": "synonym",
+      "defaultActive": true
+    },
+    {
+      "key": "antonym",
+      "label": "反义词",
+      "color": "#f39c12",
+      "lineStyle": "dotted",
+      "arrowStyle": "none",
+      "edgeLength": 100,
+      "pairWith": "antonym",
+      "defaultActive": true
+    },
+    {
+      "key": "meronym",
+      "label": "部分词",
+      "color": "#9b59b6",
+      "lineStyle": "solid",
+      "arrowStyle": "hollow",
+      "edgeLength": 100,
+      "pairWith": "holonym",
+      "defaultActive": true
+    },
+    {
+      "key": "holonym",
+      "label": "整体词",
+      "color": "#1abc9c",
+      "lineStyle": "solid",
+      "arrowStyle": "hollow",
+      "edgeLength": 100,
+      "pairWith": "meronym",
+      "defaultActive": false
+    },
+    {
+      "key": "compound",
+      "label": "复合词",
+      "color": "#e67e22",
+      "lineStyle": "dashed",
+      "arrowStyle": "filled",
+      "edgeLength": 100,
+      "defaultActive": true
+    },
+    {
+      "key": "graphonyms",
+      "label": "形近词",
+      "color": "#34495e",
+      "lineStyle": "dotted",
+      "arrowStyle": "none",
+      "edgeLength": 100,
+      "pairWith": "graphonyms",
+      "defaultActive": true
+    },
+    {
+      "key": "variant",
+      "label": "变体词",
+      "color": "#1abc9c",
+      "lineStyle": "dotted",
+      "arrowStyle": "none",
+      "edgeLength": 100,
+      "pairWith": "variant",
+      "defaultActive": true
+    }
+  ],
+  "posTypes": [
+    {
+      "key": "noun",
+      "label": "名词",
+      "abbreviation": "n.",
+      "description": "表示人、事物、地点或抽象概念"
+    },
+    {
+      "key": "verb",
+      "label": "动词",
+      "abbreviation": "v.",
+      "description": "表示动作或状态"
+    },
+    {
+      "key": "adjective",
+      "label": "形容词",
+      "abbreviation": "adj.",
+      "description": "描述或修饰名词"
+    },
+    {
+      "key": "adverb",
+      "label": "副词",
+      "abbreviation": "adv.",
+      "description": "修饰动词、形容词或其他副词"
+    },
+    {
+      "key": "conjunction",
+      "label": "连词",
+      "abbreviation": "conj.",
+      "description": "连接词、短语或句子"
+    },
+    {
+      "key": "preposition",
+      "label": "介词",
+      "abbreviation": "prep.",
+      "description": "表示名词与其他词的关系"
+    },
+    {
+      "key": "pronoun",
+      "label": "代词",
+      "abbreviation": "pron.",
+      "description": "代替名词或名词短语"
+    },
+    {
+      "key": "interjection",
+      "label": "感叹词",
+      "abbreviation": "int.",
+      "description": "表达情感或感叹"
+    },
+    {
+      "key": "verb_transitive",
+      "label": "及物动词",
+      "abbreviation": "vt.",
+      "description": "需要宾语的动词"
+    },
+    {
+      "key": "verb_intransitive",
+      "label": "不及物动词",
+      "abbreviation": "vi.",
+      "description": "不需要宾语的动词"
+    }
+  ],
+  "exportedAt": "2025-10-23T06:23:26.982Z"
+}

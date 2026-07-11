@@ -11,12 +11,25 @@ export interface EdgeTooltipContext {
   edgeData: GraphEdgeData
 }
 
+export interface DepthEffectOptions {
+  /** 是否启用景深样式，默认 true */
+  enabled?: boolean
+  /** 缺少 depth 时，是否从中心节点自动按 BFS 推导层级，默认 true */
+  autoDepth?: boolean
+  /** 悬浮节点时淡化无关元素，突出一跳关系，默认 true */
+  focusOnHover?: boolean
+  /** 远层淡出的强度，范围 0-1，默认 0.7 */
+  fadeStrength?: number
+}
+
 export interface UseCytoscapeOptions {
   graphData: GraphData
   graphVersion: number
   activeRelations: string[]
   layout: LayoutType
   showDefinitionInNode: boolean
+  /** 伪 3D 景深效果配置 */
+  depthEffects?: DepthEffectOptions
   /** 关系类型配置：边颜色/线型/箭头/理想边长/对称语义，由宿主注入 */
   relationTypes: RelationTypeConfig[]
   /** 节点定义提取器（用于"节点内显示定义"与悬浮提示），默认读 posDefinitions[0].definition */
@@ -41,6 +54,14 @@ const defaultNodeDefinition = (data: GraphNodeData): string | undefined =>
   data.posDefinitions?.[0]?.definition
 
 export function useCytoscape(options: UseCytoscapeOptions) {
+  const depthEffects = {
+    enabled: options.depthEffects?.enabled ?? true,
+    autoDepth: options.depthEffects?.autoDepth ?? true,
+    focusOnHover: options.depthEffects?.focusOnHover ?? true,
+    fadeStrength: Math.min(1, Math.max(0, options.depthEffects?.fadeStrength ?? 0.7)),
+  }
+  const focusOnHover = depthEffects.enabled && depthEffects.focusOnHover
+
   // 关系类型工具（基于宿主注入的配置）
   const getRelationTypes = () => options.relationTypes || []
   const isSymmetricRelation = (relationKey: string): boolean => {
@@ -230,6 +251,182 @@ export function useCytoscape(options: UseCytoscapeOptions) {
       }
     })
 
+    // Cytoscape 3.34 起弃用 width/height: label。改用函数按标签长度估算尺寸，
+    // 同时让各景深层级拥有真实的节点体积差，而不只是字号差。
+    const nodeLabel = (node: NodeSingular) =>
+      String(node.data('displayLabel') ?? node.data('label') ?? '')
+    const nodeWidth = (node: NodeSingular, fontSize: number, min: number, max = 180) => {
+      const longestLine = nodeLabel(node).split('\n').reduce((longest, line) =>
+        line.length > longest.length ? line : longest, '')
+      return Math.min(max, Math.max(min, Math.ceil(longestLine.length * fontSize * 0.68 + 24)))
+    }
+    const nodeHeight = (node: NodeSingular, fontSize: number, min: number) => {
+      const lineCount = Math.max(1, nodeLabel(node).split('\n').length)
+      return Math.max(min, Math.ceil(lineCount * fontSize * 1.35 + 18))
+    }
+
+    // 动态样式同时包含 node/edge 属性，使用宽类型规避旧版 @types 的联合推导限制。
+    const depthStyle: any[] = depthEffects.enabled
+      ? [
+          {
+            selector: 'node.orbit-depth-0',
+            style: {
+              'font-size': '18px',
+              'min-width': '68px',
+              'min-height': '68px',
+              width: (node: NodeSingular) => nodeWidth(node, 18, 68),
+              height: (node: NodeSingular) => nodeHeight(node, 18, 54),
+              padding: '7px',
+              opacity: 1,
+              'z-index': 20,
+              'underlay-color': '#0f172a',
+              'underlay-opacity': 0.16,
+              'underlay-padding': 8,
+              'underlay-shape': 'round-rectangle',
+            },
+          },
+          {
+            selector: 'node.orbit-depth-1',
+            style: {
+              'font-size': '14px',
+              'min-width': '52px',
+              'min-height': '52px',
+              width: (node: NodeSingular) => nodeWidth(node, 14, 52, 150),
+              height: (node: NodeSingular) => nodeHeight(node, 14, 44),
+              opacity: 1 - depthEffects.fadeStrength * 0.08,
+              'z-index': 16,
+              'underlay-color': '#0f172a',
+              'underlay-opacity': 0.12,
+              'underlay-padding': 6,
+              'underlay-shape': 'round-rectangle',
+            },
+          },
+          {
+            selector: 'node.orbit-depth-2',
+            style: {
+              'font-size': '12px',
+              'min-width': '44px',
+              'min-height': '44px',
+              width: (node: NodeSingular) => nodeWidth(node, 12, 44, 130),
+              height: (node: NodeSingular) => nodeHeight(node, 12, 36),
+              opacity: 1 - depthEffects.fadeStrength * 0.25,
+              'z-index': 12,
+              'underlay-color': '#0f172a',
+              'underlay-opacity': 0.08,
+              'underlay-padding': 4,
+              'underlay-shape': 'round-rectangle',
+            },
+          },
+          {
+            selector: 'node.orbit-depth-3',
+            style: {
+              'font-size': '10px',
+              'min-width': '38px',
+              'min-height': '38px',
+              width: (node: NodeSingular) => nodeWidth(node, 10, 38, 110),
+              height: (node: NodeSingular) => nodeHeight(node, 10, 31),
+              opacity: 1 - depthEffects.fadeStrength * 0.42,
+              'z-index': 8,
+              'underlay-color': '#0f172a',
+              'underlay-opacity': 0.05,
+              'underlay-padding': 2,
+              'underlay-shape': 'round-rectangle',
+            },
+          },
+          {
+            selector: 'node.orbit-depth-far',
+            style: {
+              'font-size': '9px',
+              'min-width': '34px',
+              'min-height': '34px',
+              width: (node: NodeSingular) => nodeWidth(node, 9, 34, 92),
+              height: (node: NodeSingular) => nodeHeight(node, 9, 27),
+              opacity: 1 - depthEffects.fadeStrength * 0.58,
+              'z-index': 4,
+              'underlay-opacity': 0,
+            },
+          },
+          {
+            selector: 'node[?isCenter]',
+            style: {
+              'border-width': 4,
+              'underlay-color': '#38bdf8',
+              'underlay-opacity': 0.2,
+              'underlay-padding': 16,
+              'underlay-shape': 'round-rectangle',
+            },
+          },
+          {
+            selector: 'edge.orbit-depth-0',
+            style: {
+              width: 3,
+              opacity: 0.94,
+              'arrow-scale': 1.5,
+              'z-index': 10,
+            },
+          },
+          {
+            selector: 'edge.orbit-depth-1',
+            style: {
+              width: 1.7,
+              opacity: 1 - depthEffects.fadeStrength * 0.28,
+              'arrow-scale': 1.2,
+              'z-index': 7,
+            },
+          },
+          {
+            selector: 'edge.orbit-depth-far',
+            style: {
+              width: 1,
+              opacity: 1 - depthEffects.fadeStrength * 0.55,
+              'arrow-scale': 0.9,
+              'z-index': 3,
+            },
+          },
+        ]
+      : []
+
+    const focusStyle: any[] = focusOnHover
+      ? [
+          {
+            selector: 'node.orbit-dimmed',
+            style: {
+              opacity: 0.12,
+              'text-opacity': 0.08,
+            },
+          },
+          {
+            selector: 'edge.orbit-dimmed',
+            style: {
+              opacity: 0.06,
+            },
+          },
+          {
+            selector: 'node.orbit-context',
+            style: {
+              opacity: 1,
+            },
+          },
+          {
+            selector: 'edge.orbit-context',
+            style: {
+              opacity: 0.92,
+            },
+          },
+          {
+            selector: 'node.orbit-hovered',
+            style: {
+              opacity: 1,
+              'border-width': 4,
+              'underlay-color': '#7dd3fc',
+              'underlay-opacity': 0.28,
+              'underlay-padding': 14,
+              'underlay-shape': 'round-rectangle',
+            },
+          },
+        ]
+      : []
+
     const cy = cytoscape({
       container: containerRef.value,
       // 禁用默认的滚轮/双指缩放：改由自定义 wheel 处理器伸缩节点间距，
@@ -251,8 +448,8 @@ export function useCytoscape(options: UseCytoscapeOptions) {
             'font-weight': 600,
             'min-width': '60px',
             'min-height': '60px',
-            width: 'label',
-            height: 'label',
+            width: (node: NodeSingular) => nodeWidth(node, 16, 60),
+            height: (node: NodeSingular) => nodeHeight(node, 16, 48),
             'padding': '5px',
             'border-width': 2,
             'border-color': '#2980b9',
@@ -278,31 +475,7 @@ export function useCytoscape(options: UseCytoscapeOptions) {
             'border-color': 'data(degreeBorder)',
           },
         },
-        // 伪3D：按距中心词的层级递减节点尺寸（depth 0 中心词保持基础尺寸）
-        {
-          selector: 'node[depth = 1]',
-          style: {
-            'font-size': '14px',
-            'min-width': '52px',
-            'min-height': '52px',
-          },
-        },
-        {
-          selector: 'node[depth = 2]',
-          style: {
-            'font-size': '12px',
-            'min-width': '44px',
-            'min-height': '44px',
-          },
-        },
-        {
-          selector: 'node[depth >= 3]',
-          style: {
-            'font-size': '10px',
-            'min-width': '38px',
-            'min-height': '38px',
-          },
-        },
+        ...depthStyle,
         {
           // 节点内显示定义时的排版
           selector: 'node.with-definition',
@@ -312,6 +485,8 @@ export function useCytoscape(options: UseCytoscapeOptions) {
             'text-max-width': '180px',
             'min-width': '85px',
             'min-height': '85px',
+            width: '180px',
+            height: '85px',
           },
         },
         {
@@ -381,27 +556,6 @@ export function useCytoscape(options: UseCytoscapeOptions) {
             'arrow-scale': 1.5,
           },
         },
-        // 伪3D：按层级递减连线粗细（depth 0 = 与中心词直接相连的边最粗）
-        {
-          selector: 'edge[depth = 0]',
-          style: {
-            width: 2.5,
-          },
-        },
-        {
-          selector: 'edge[depth = 1]',
-          style: {
-            width: 1.6,
-            'arrow-scale': 1.2,
-          },
-        },
-        {
-          selector: 'edge[depth >= 2]',
-          style: {
-            width: 1,
-            'arrow-scale': 1,
-          },
-        },
         {
           // 缩到最小档位时线条变细
           selector: 'edge.lod-thin',
@@ -436,6 +590,8 @@ export function useCytoscape(options: UseCytoscapeOptions) {
           },
         },
         ...edgeStyles,
+        // 聚焦样式放在关系色之后，确保悬浮时的空间层次不会被覆盖
+        ...focusStyle,
       ],
       minZoom: 0.3,
       maxZoom: 3,
@@ -634,6 +790,13 @@ export function useCytoscape(options: UseCytoscapeOptions) {
     cy.on('mouseover', 'node', (e: any) => {
       const node = e.target as NodeSingular
 
+      if (focusOnHover) {
+        const context = node.closedNeighborhood()
+        cy.elements().difference(context).addClass('orbit-dimmed')
+        context.addClass('orbit-context')
+        node.addClass('orbit-hovered')
+      }
+
       // "+"虚拟节点不显示提示
       if (node.data('isMoreNode')) {
         return
@@ -655,6 +818,9 @@ export function useCytoscape(options: UseCytoscapeOptions) {
 
     cy.on('mouseout', 'node', () => {
       hideTooltip(tooltipDiv)
+      if (focusOnHover) {
+        cy.elements().removeClass('orbit-dimmed orbit-context orbit-hovered')
+      }
     })
 
     cy.on('mouseover', 'edge', (e: any) => {
@@ -757,6 +923,84 @@ export function useCytoscape(options: UseCytoscapeOptions) {
     return { bg: '#e74c3c', border: '#c0392b' }                         // 红色 - 大量关系（核心节点）
   }
 
+  // 把宿主提供的 depth 与自动 BFS 层级统一写入 scratch + class，避免污染宿主数据。
+  // 没有显式 depth 时，只要存在 isCenter/depth=0 根节点，也能得到完整景深。
+  const syncDepthData = () => {
+    if (!cyInstance.value || !depthEffects.enabled) return
+
+    const cy = cyInstance.value
+    const nodes = cy.nodes()
+    const adjacency = new Map<string, string[]>()
+    const inferredDepth = new Map<string, number>()
+    const queue: string[] = []
+    const depthClasses = 'orbit-depth-0 orbit-depth-1 orbit-depth-2 orbit-depth-3 orbit-depth-far'
+
+    const applyDepth = (element: any, depth: number | undefined, farFrom: number) => {
+      element.removeClass(depthClasses)
+      if (depth === undefined) {
+        element.removeScratch('_orbitDepth')
+        return
+      }
+
+      element.scratch('_orbitDepth', depth)
+      element.addClass(depth >= farFrom ? 'orbit-depth-far' : `orbit-depth-${Math.floor(depth)}`)
+    }
+
+    nodes.forEach((node) => {
+      adjacency.set(node.id(), [])
+    })
+    cy.edges().forEach((edge) => {
+      const source = edge.source().id()
+      const target = edge.target().id()
+      adjacency.get(source)?.push(target)
+      adjacency.get(target)?.push(source)
+    })
+
+    if (depthEffects.autoDepth) {
+      nodes.forEach((node) => {
+        const explicitDepth = node.data('depth')
+        if (node.data('isCenter') === true || explicitDepth === 0) {
+          inferredDepth.set(node.id(), 0)
+          queue.push(node.id())
+        }
+      })
+
+      for (let index = 0; index < queue.length; index++) {
+        const id = queue[index]
+        const nextDepth = (inferredDepth.get(id) ?? 0) + 1
+        for (const neighborId of adjacency.get(id) ?? []) {
+          if (inferredDepth.has(neighborId)) continue
+          inferredDepth.set(neighborId, nextDepth)
+          queue.push(neighborId)
+        }
+      }
+    }
+
+    cy.batch(() => {
+      nodes.forEach((node) => {
+        const explicitDepth = node.data('depth')
+        const effectiveDepth = typeof explicitDepth === 'number'
+          ? Math.max(0, explicitDepth)
+          : inferredDepth.get(node.id())
+
+        applyDepth(node, effectiveDepth, 4)
+      })
+
+      cy.edges().forEach((edge) => {
+        const explicitDepth = edge.data('depth')
+        const sourceDepth = edge.source().scratch('_orbitDepth')
+        const targetDepth = edge.target().scratch('_orbitDepth')
+        const effectiveDepth = typeof explicitDepth === 'number'
+          ? Math.max(0, explicitDepth)
+          : typeof sourceDepth === 'number' && typeof targetDepth === 'number'
+            ? Math.min(sourceDepth, targetDepth)
+            : undefined
+
+        applyDepth(edge, effectiveDepth, 2)
+      })
+    })
+  }
+
   const updateGraph = () => {
     if (!cyInstance.value) return
 
@@ -767,6 +1011,9 @@ export function useCytoscape(options: UseCytoscapeOptions) {
       cy.elements().remove()
       cy.add(options.graphData.nodes)
       cy.add(options.graphData.edges)
+
+      // 优先建立统一景深，后续样式与布局都读取 _orbitDepth
+      syncDepthData()
 
       // 设置边的初始可见性
       updateEdgeVisibility()
@@ -957,7 +1204,7 @@ export function useCytoscape(options: UseCytoscapeOptions) {
         const relationType = relationTypes.find(rt => rt.key === relation)
         const base = relationType?.edgeLength || 100
 
-        const depth = edge.data('depth')
+        const depth = edge.scratch('_orbitDepth') ?? edge.data('depth')
         const depthFactor = depth === undefined ? 1 : depth <= 0 ? 1 : depth === 1 ? 0.75 : 0.55
         return base * depthFactor
       }
@@ -1026,6 +1273,19 @@ export function useCytoscape(options: UseCytoscapeOptions) {
 
         // 性能优化
         refresh: 20,             // 每20次迭代刷新一次显示
+        fit: false,
+        padding: 30,
+      })
+    } else if (options.layout === 'concentric') {
+      // 真正的“轨道”布局：层级越近权重越高，相同 depth 自动落在同一圈。
+      Object.assign(layoutOptions, {
+        concentric: (node: any) => 100 - (node.scratch('_orbitDepth') ?? node.data('depth') ?? 0),
+        levelWidth: () => 1,
+        minNodeSpacing: 45,
+        spacingFactor: 1.15,
+        startAngle: -Math.PI / 2,
+        clockwise: true,
+        equidistant: false,
         fit: false,
         padding: 30,
       })
@@ -1128,6 +1388,7 @@ export function useCytoscape(options: UseCytoscapeOptions) {
       Object.keys(newData).forEach(key => {
         node.data(key, newData[key])
       })
+      syncDepthData()
       // 重新计算展示标签（label/定义可能已变化）
       updateNodeLabels()
     }
@@ -1182,6 +1443,7 @@ export function useCytoscape(options: UseCytoscapeOptions) {
     if (node && node.isNode()) {
       // 移除节点（会自动移除相关的边）
       node.remove()
+      syncDepthData()
     }
   }
 
@@ -1195,6 +1457,7 @@ export function useCytoscape(options: UseCytoscapeOptions) {
         node.remove()
       }
     })
+    syncDepthData()
   }
 
   // 移除边（关系）
@@ -1215,6 +1478,7 @@ export function useCytoscape(options: UseCytoscapeOptions) {
         edges.remove()
       }
     }
+    syncDepthData()
   }
 
   // 添加边（关系）
@@ -1287,6 +1551,8 @@ export function useCytoscape(options: UseCytoscapeOptions) {
     // 添加边到图表
     const newEdge = cyInstance.value.add(edgeConfig)
 
+    syncDepthData()
+
     // 设置边的可见性（根据 activeRelations）
     newEdge.toggleClass('hidden-relation', !options.activeRelations.includes(relation))
 
@@ -1316,6 +1582,8 @@ export function useCytoscape(options: UseCytoscapeOptions) {
 
     // 添加节点到图表
     const newNode = cyInstance.value.add(nodeConfig)
+
+    syncDepthData()
 
     // 更新节点标签显示
     updateNodeLabels()

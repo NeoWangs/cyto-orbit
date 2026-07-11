@@ -49,4 +49,4 @@ export interface GraphData {
   edges: Array<{ data: GraphEdgeData }>
 }
 
-export type LayoutType = 'cose' | 'circle' | 'grid' | 'breadthfirst'
+export type LayoutType = 'cose' | 'circle' | 'grid' | 'breadthfirst' | 'concentric'

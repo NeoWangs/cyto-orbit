@@ -6,7 +6,9 @@
 
 ## 特性
 
-- **伪 3D 层级递减**：按距中心节点的 BFS 层级（`depth` 数据）递减字号、节点尺寸、连线粗细与理想边长
+- **增强伪 3D 景深**：按距中心节点的 BFS 层级递减字号、节点尺寸、连线粗细、透明度、阴影与理想边长；中心节点带空间辉光
+- **自动层级推导**：只需标记 `isCenter: true`，缺失的 `depth` 会按最短路径自动补齐
+- **局部空间聚焦**：悬浮节点时突出一跳关系、淡化远处网状结构，复杂图也能快速辨认上下文
 - **拖动力传导**：拖动节点时邻居跟随移动，一跳最强、二跳变弱、三跳最弱、更远不动；按住空格键可只拖动单个节点
 - **间距缩放**：滚轮缩放伸缩节点间距而非画布 zoom，节点像素大小保持不变
 - **LOD 降级**：缩小到低档位时先降字号，最小档退化为空心圆点 + 细线
@@ -23,6 +25,17 @@ npm install github:NeoWangs/cyto-orbit
 ```
 
 `vue`（^3.3）与 `cytoscape`（^3.23）为 peer dependencies，需宿主项目自行安装。
+
+## 本地演示
+
+仓库内置基于 `wordNet-navigator` 示例数据的交互式演示：
+
+```bash
+npm install
+npm run demo
+```
+
+默认地址为 `http://127.0.0.1:4173`。演示包含中心词切换、关系筛选、力导向/同心轨道布局切换、定义显示与 PNG 导出。
 
 ## 使用
 
@@ -41,6 +54,12 @@ const { containerRef, fitView, exportPNG, addNode, addEdge, removeNode, removeEd
   get activeRelations() { return activeKeys.value }, // 控制各关系边显隐
   get layout() { return 'cose' },
   get showDefinitionInNode() { return false },
+  depthEffects: {
+    enabled: true,
+    autoDepth: true,
+    focusOnHover: true,
+    fadeStrength: 0.7,
+  },
   relationTypes,
   onNodeClick: (data) => { /* ... */ },
 })
@@ -53,10 +72,22 @@ const { containerRef, fitView, exportPNG, addNode, addEdge, removeNode, removeEd
 
 ### 数据约定
 
-- 节点 `data.depth`（可选）：距中心的层级，`0` 为中心，驱动伪 3D 递减；不提供则统一尺寸
+- 节点 `data.depth`（可选）：距中心的层级，`0` 为中心，驱动伪 3D 递减；省略时默认从 `isCenter: true` 节点按 BFS 自动推导
 - 边 `data.depth`（可选）：建议取两端节点层级较小值，驱动连线粗细/长度递减
 - 节点 `data.isMoreNode`（可选）：标记为"更多"虚拟节点（灰色小圆点，点击触发 `onMoreNodeClick`）
 - 边 `relation: 'more'`：连接"更多"节点的虚线边
+
+### 景深与轨道布局
+
+`depthEffects` 可关闭整套景深、自动层级或悬浮聚焦，也可用 `fadeStrength`（`0-1`）控制远层淡出强度。若希望层级严格落在同心轨道上，可把 `layout` 设为 `concentric`；保留自然网状形态则继续使用 `cose`。
+
+```ts
+useCytoscape({
+  // ...
+  layout: 'concentric',
+  depthEffects: { fadeStrength: 0.8 },
+})
+```
 
 ### 自定义提示文案
 

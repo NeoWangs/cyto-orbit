@@ -18,6 +18,8 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "demo": "vite --config demo/vite.config.ts",
+    "demo:build": "vite build --config demo/vite.config.ts",
     "prepare": "npm run build"
   },
   "keywords": [
@@ -42,8 +44,10 @@
   },
   "devDependencies": {
     "@types/cytoscape": "^3.21.4",
+    "@vitejs/plugin-vue": "^5.2.4",
     "cytoscape": "^3.28.1",
     "typescript": "^5.3.3",
+    "vite": "^6.4.3",
     "vue": "^3.4.21"
   }
 }
