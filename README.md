@@ -1,12 +1,12 @@
 # cyto-orbit
 
-伪 3D 交互式关系网络视图 —— 基于 [Cytoscape.js](https://js.cytoscape.org/) 的 Vue 3 composable。
+交互式层级关系网络视图 —— 基于 [Cytoscape.js](https://js.cytoscape.org/) 的 Vue 3 composable。
 
-为「以中心词展开的知识网络」场景设计（词网、概念图、知识图谱浏览器），中心节点最大、层级向外递减，形成轨道式的景深效果。
+为「以中心词展开的知识网络」场景设计（词网、概念图、知识图谱浏览器），通过节点尺寸、透明度和连线样式递减，建立清晰的中心—外围视觉层级。
 
 ## 特性
 
-- **增强伪 3D 景深**：按距中心节点的 BFS 层级递减字号、节点尺寸、连线粗细、透明度、阴影与理想边长；中心节点带空间辉光
+- **层级视觉递减**：按距中心节点的 BFS 层级递减字号、节点尺寸、连线粗细、透明度与理想边长；中心节点使用强调样式
 - **自动层级推导**：只需标记 `isCenter: true`，缺失的 `depth` 会按最短路径自动补齐
 - **局部空间聚焦**：悬浮节点时突出一跳关系、淡化远处网状结构，复杂图也能快速辨认上下文
 - **拖动力传导**：拖动节点时邻居跟随移动，一跳最强、二跳变弱、三跳最弱、更远不动；按住空格键可只拖动单个节点
@@ -72,14 +72,14 @@ const { containerRef, fitView, exportPNG, addNode, addEdge, removeNode, removeEd
 
 ### 数据约定
 
-- 节点 `data.depth`（可选）：距中心的层级，`0` 为中心，驱动伪 3D 递减；省略时默认从 `isCenter: true` 节点按 BFS 自动推导
+- 节点 `data.depth`（可选）：距中心的层级，`0` 为中心，驱动层级样式递减；省略时默认从 `isCenter: true` 节点按 BFS 自动推导
 - 边 `data.depth`（可选）：建议取两端节点层级较小值，驱动连线粗细/长度递减
 - 节点 `data.isMoreNode`（可选）：标记为"更多"虚拟节点（灰色小圆点，点击触发 `onMoreNodeClick`）
 - 边 `relation: 'more'`：连接"更多"节点的虚线边
 
-### 景深与轨道布局
+### 层级样式与轨道布局
 
-`depthEffects` 可关闭整套景深、自动层级或悬浮聚焦，也可用 `fadeStrength`（`0-1`）控制远层淡出强度。若希望层级严格落在同心轨道上，可把 `layout` 设为 `concentric`；保留自然网状形态则继续使用 `cose`。
+`depthEffects` 用于控制层级样式、自动层级和悬浮聚焦，也可用 `fadeStrength`（`0-1`）控制外围节点的淡出强度。若希望不同层级排列在同心轨道上，可把 `layout` 设为 `concentric`；保留自然网状形态则继续使用 `cose`。
 
 ```ts
 useCytoscape({
