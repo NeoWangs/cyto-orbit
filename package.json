@@ -1,7 +1,7 @@
 {
   "name": "cyto-orbit",
-  "version": "0.1.0",
-  "description": "Pseudo-3D interactive graph view composable for Vue 3, powered by Cytoscape.js — depth-based sizing, drag force propagation, spacing zoom, and LOD rendering.",
+  "version": "0.1.1",
+  "description": "Interactive hierarchical graph view composable for Vue 3, powered by Cytoscape.js — depth-based styling, drag propagation, spacing zoom, and LOD rendering.",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",

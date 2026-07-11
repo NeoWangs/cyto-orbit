@@ -1,5 +1,8 @@
 # cyto-orbit
 
+[![npm version](https://img.shields.io/npm/v/cyto-orbit.svg)](https://www.npmjs.com/package/cyto-orbit)
+[![license](https://img.shields.io/npm/l/cyto-orbit.svg)](./LICENSE)
+
 交互式层级关系网络视图 —— 基于 [Cytoscape.js](https://js.cytoscape.org/) 的 Vue 3 composable。
 
 为「以中心词展开的知识网络」场景设计（词网、概念图、知识图谱浏览器），通过节点尺寸、透明度和连线样式递减，建立清晰的中心—外围视觉层级。
@@ -20,8 +23,7 @@
 ## 安装
 
 ```bash
-npm install github:NeoWangs/cyto-orbit
-# 或发布到 npm 后：npm install cyto-orbit
+npm install cyto-orbit
 ```
 
 `vue`（^3.3）与 `cytoscape`（^3.23）为 peer dependencies，需宿主项目自行安装。
