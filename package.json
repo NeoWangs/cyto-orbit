@@ -1,0 +1,49 @@
+{
+  "name": "cyto-orbit",
+  "version": "0.1.0",
+  "description": "Pseudo-3D interactive graph view composable for Vue 3, powered by Cytoscape.js — depth-based sizing, drag force propagation, spacing zoom, and LOD rendering.",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "cytoscape",
+    "graph",
+    "network",
+    "visualization",
+    "composable",
+    "wordnet",
+    "knowledge-graph"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NeoWangs/cyto-orbit.git"
+  },
+  "peerDependencies": {
+    "cytoscape": "^3.23.0",
+    "vue": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/cytoscape": "^3.21.4",
+    "cytoscape": "^3.28.1",
+    "typescript": "^5.3.3",
+    "vue": "^3.4.21"
+  }
+}
