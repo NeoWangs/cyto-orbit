@@ -16,6 +16,7 @@
 - **间距缩放**：滚轮缩放伸缩节点间距而非画布 zoom，节点像素大小保持不变
 - **LOD 降级**：缩小到低档位时先降字号，最小档退化为空心圆点 + 细线
 - **自适应节点**：圆角矩形，宽高跟随标签内容；可切换在节点内显示定义
+- **宿主节点样式**：通过 Cytoscape selector 为任意业务节点追加样式，规则优先于内置景深、选中与悬浮样式
 - **度数着色**：按关系数量分档着色（样式表 data mapper，无逐节点内联样式）
 - **交互齐全**：单击/双击/右键/多选/Delete 删除/悬浮提示（节点定义、边关系语义）
 - **性能**：批量渲染（`cy.batch`）、O(N+E) 度数统计、`shallowRef` 持有实例避免 Vue 深层代理
@@ -88,6 +89,34 @@ useCytoscape({
   // ...
   layout: 'concentric',
   depthEffects: { fadeStrength: 0.8 },
+})
+```
+
+### 自定义节点外观
+
+`nodeStyleRules` 接受 Cytoscape 节点选择器和样式，并在全部内置样式之后应用。`cyto-orbit` 不限定节点业务类型，宿主可以使用透传到节点 `data` 的任意字段：
+
+```ts
+useCytoscape({
+  // ...
+  nodeStyleRules: [
+    {
+      selector: 'node',
+      style: {
+        'background-opacity': 0,
+        'border-width': 0,
+        'underlay-opacity': 0,
+      },
+    },
+    {
+      selector: 'node[kind = "tag"]',
+      style: {
+        'background-opacity': 0.72,
+        'border-width': 1.5,
+        'border-color': '#ffffff',
+      },
+    },
+  ],
 })
 ```
 

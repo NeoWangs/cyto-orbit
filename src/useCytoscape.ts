@@ -22,6 +22,15 @@ export interface DepthEffectOptions {
   fadeStrength?: number
 }
 
+/**
+ * 宿主追加的节点样式规则。选择器使用 Cytoscape selector 语法，
+ * 并在 cyto-orbit 内置样式之后应用，适合按宿主自定义字段区分节点外观。
+ */
+export interface NodeStyleRule {
+  selector: string
+  style: cytoscape.Css.Node
+}
+
 export interface UseCytoscapeOptions {
   graphData: GraphData
   graphVersion: number
@@ -36,6 +45,8 @@ export interface UseCytoscapeOptions {
   nodeDefinition?: (nodeData: GraphNodeData) => string | undefined
   /** 节点悬浮提示文案，默认为定义，无定义时回退为 label */
   nodeTooltip?: (nodeData: GraphNodeData) => string | undefined
+  /** 追加在全部内置样式之后的节点样式规则 */
+  nodeStyleRules?: NodeStyleRule[]
   /** 边悬浮提示文案，默认为「target 是 source 的<关系>」 */
   edgeTooltip?: (ctx: EdgeTooltipContext) => string | undefined
   onNodeClick?: (nodeData: any) => void
@@ -262,7 +273,7 @@ export function useCytoscape(options: UseCytoscapeOptions) {
     }
     const nodeHeight = (node: NodeSingular, fontSize: number, min: number) => {
       const lineCount = Math.max(1, nodeLabel(node).split('\n').length)
-      return Math.max(min, Math.ceil(lineCount * fontSize * 1.35 + 18))
+      return Math.max(min, Math.ceil(lineCount * fontSize * 1.2 + 8))
     }
 
     // 动态样式同时包含 node/edge 属性，使用宽类型规避旧版 @types 的联合推导限制。
@@ -273,15 +284,15 @@ export function useCytoscape(options: UseCytoscapeOptions) {
             style: {
               'font-size': '18px',
               'min-width': '68px',
-              'min-height': '68px',
+              'min-height': '40px',
               width: (node: NodeSingular) => nodeWidth(node, 18, 68),
-              height: (node: NodeSingular) => nodeHeight(node, 18, 54),
-              padding: '7px',
+              height: (node: NodeSingular) => nodeHeight(node, 18, 34),
+              padding: '4px',
               opacity: 1,
               'z-index': 20,
               'underlay-color': '#0f172a',
               'underlay-opacity': 0.16,
-              'underlay-padding': 8,
+              'underlay-padding': 6,
               'underlay-shape': 'round-rectangle',
             },
           },
@@ -290,14 +301,15 @@ export function useCytoscape(options: UseCytoscapeOptions) {
             style: {
               'font-size': '14px',
               'min-width': '52px',
-              'min-height': '52px',
+              'min-height': '32px',
               width: (node: NodeSingular) => nodeWidth(node, 14, 52, 150),
-              height: (node: NodeSingular) => nodeHeight(node, 14, 44),
+              height: (node: NodeSingular) => nodeHeight(node, 14, 28),
+              padding: '3px',
               opacity: 1 - depthEffects.fadeStrength * 0.08,
               'z-index': 16,
               'underlay-color': '#0f172a',
               'underlay-opacity': 0.12,
-              'underlay-padding': 6,
+              'underlay-padding': 4,
               'underlay-shape': 'round-rectangle',
             },
           },
@@ -306,14 +318,15 @@ export function useCytoscape(options: UseCytoscapeOptions) {
             style: {
               'font-size': '12px',
               'min-width': '44px',
-              'min-height': '44px',
+              'min-height': '28px',
               width: (node: NodeSingular) => nodeWidth(node, 12, 44, 130),
-              height: (node: NodeSingular) => nodeHeight(node, 12, 36),
+              height: (node: NodeSingular) => nodeHeight(node, 12, 24),
+              padding: '3px',
               opacity: 1 - depthEffects.fadeStrength * 0.25,
               'z-index': 12,
               'underlay-color': '#0f172a',
               'underlay-opacity': 0.08,
-              'underlay-padding': 4,
+              'underlay-padding': 3,
               'underlay-shape': 'round-rectangle',
             },
           },
@@ -322,9 +335,10 @@ export function useCytoscape(options: UseCytoscapeOptions) {
             style: {
               'font-size': '10px',
               'min-width': '38px',
-              'min-height': '38px',
+              'min-height': '24px',
               width: (node: NodeSingular) => nodeWidth(node, 10, 38, 110),
-              height: (node: NodeSingular) => nodeHeight(node, 10, 31),
+              height: (node: NodeSingular) => nodeHeight(node, 10, 20),
+              padding: '2px',
               opacity: 1 - depthEffects.fadeStrength * 0.42,
               'z-index': 8,
               'underlay-color': '#0f172a',
@@ -338,9 +352,10 @@ export function useCytoscape(options: UseCytoscapeOptions) {
             style: {
               'font-size': '9px',
               'min-width': '34px',
-              'min-height': '34px',
+              'min-height': '22px',
               width: (node: NodeSingular) => nodeWidth(node, 9, 34, 92),
-              height: (node: NodeSingular) => nodeHeight(node, 9, 27),
+              height: (node: NodeSingular) => nodeHeight(node, 9, 18),
+              padding: '2px',
               opacity: 1 - depthEffects.fadeStrength * 0.58,
               'z-index': 4,
               'underlay-opacity': 0,
@@ -352,7 +367,7 @@ export function useCytoscape(options: UseCytoscapeOptions) {
               'border-width': 4,
               'underlay-color': '#38bdf8',
               'underlay-opacity': 0.2,
-              'underlay-padding': 16,
+              'underlay-padding': 10,
               'underlay-shape': 'round-rectangle',
             },
           },
@@ -420,7 +435,7 @@ export function useCytoscape(options: UseCytoscapeOptions) {
               'border-width': 4,
               'underlay-color': '#7dd3fc',
               'underlay-opacity': 0.28,
-              'underlay-padding': 14,
+              'underlay-padding': 8,
               'underlay-shape': 'round-rectangle',
             },
           },
@@ -447,10 +462,10 @@ export function useCytoscape(options: UseCytoscapeOptions) {
             'font-size': '16px',
             'font-weight': 600,
             'min-width': '60px',
-            'min-height': '60px',
+            'min-height': '36px',
             width: (node: NodeSingular) => nodeWidth(node, 16, 60),
-            height: (node: NodeSingular) => nodeHeight(node, 16, 48),
-            'padding': '5px',
+            height: (node: NodeSingular) => nodeHeight(node, 16, 30),
+            'padding': '3px',
             'border-width': 2,
             'border-color': '#2980b9',
             'text-outline-width': 2,
@@ -592,6 +607,8 @@ export function useCytoscape(options: UseCytoscapeOptions) {
         ...edgeStyles,
         // 聚焦样式放在关系色之后，确保悬浮时的空间层次不会被覆盖
         ...focusStyle,
+        // 宿主节点样式最后应用，允许覆盖默认、景深、选中与悬浮外观。
+        ...(options.nodeStyleRules ?? []),
       ],
       minZoom: 0.3,
       maxZoom: 3,
